@@ -20,7 +20,7 @@ export class GeocodingSearchModal extends Modal {
 
 	onOpen() {
 		const { contentEl } = this;
-		this.setTitle("Confirm search term");
+		this.titleEl.setText("Confirm search term");
 
 		const inputContainer = contentEl.createEl("div", { cls: "geocoding-search-container" });
 

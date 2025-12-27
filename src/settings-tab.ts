@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import GeocodingPlugin from "./main";
-import { propertyDescriptions } from "./settings";
+import { defaultSettings, propertyDescriptions } from "./settings";
 import { GeocodingPropertyDescription, GeocodingPropertyKey } from "./types";
 
 export class GeocodingPluginSettingTab extends PluginSettingTab {
@@ -46,6 +46,31 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 		}
 
 		new Setting(containerEl).setName('Behavior').setHeading();
+		new Setting(containerEl)
+			.setName("Search property order")
+			.setDesc(
+				"Comma-separated list of properties to use when querying the geocoding API. Use \"name\" to fall back to the note name."
+			)
+			.addText((text) =>
+				text
+					.setPlaceholder(
+						defaultSettings.searchPropertyOrder.join(",")
+					)
+					.setValue(
+						this.plugin.settings.searchPropertyOrder.join(",")
+					)
+					.onChange(async (value) => {
+						const nextOrder = value
+							.split(",")
+							.map((item) => item.trim())
+							.filter(Boolean);
+						this.plugin.settings.searchPropertyOrder =
+							nextOrder.length
+								? nextOrder
+								: [...defaultSettings.searchPropertyOrder];
+						await this.plugin.saveSettings();
+					})
+			);
 		new Setting(containerEl)
 			.setName("Override existing properties")
 			.setDesc(

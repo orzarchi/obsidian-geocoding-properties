@@ -59,6 +59,7 @@ export const defaultSettings: GeocodingPluginSettings = {
 		},
 	},
 	overrideExistingProperties: false,
+	searchPropertyOrder: ["address", "title", "name"],
 	mapLinkProvider: "google",
 	apiProvider: "free-geocoding-api",
 	apiKey: "",

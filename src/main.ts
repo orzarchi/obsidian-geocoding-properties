@@ -50,15 +50,38 @@ export default class GeocodingPlugin extends Plugin {
 	}
 
 	getSearchTerm(file: TFile) {
-		let searchTerm = file.basename;
 		const metadataCache = this.app.metadataCache.getFileCache(file);
-		if (metadataCache?.frontmatter) {
-			searchTerm =
-				metadataCache.frontmatter.address ||
-				metadataCache.frontmatter.title ||
-				searchTerm;
+		const frontmatter = metadataCache?.frontmatter;
+		const order =
+			this.settings.searchPropertyOrder?.length
+				? this.settings.searchPropertyOrder
+				: defaultSettings.searchPropertyOrder;
+		for (const rawKey of order) {
+			const key = rawKey?.trim();
+			if (!key) {
+				continue;
+			}
+			if (key.toLowerCase() === "name") {
+				return file.basename;
+			}
+			if (!frontmatter) {
+				continue;
+			}
+			const value = frontmatter[key];
+			if (value === undefined || value === null) {
+				continue;
+			}
+			const stringValue =
+				typeof value === "string"
+					? value
+					: Array.isArray(value)
+					? value.join(", ")
+					: String(value);
+			if (stringValue.trim()) {
+				return stringValue;
+			}
 		}
-		return searchTerm;
+		return file.basename;
 	}
 
 	async getResults(searchTerm: string) {

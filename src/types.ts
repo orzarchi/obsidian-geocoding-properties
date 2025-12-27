@@ -21,6 +21,7 @@ export interface GeocodingProperty {
 export interface GeocodingPluginSettings {
 	properties: Record<GeocodingPropertyKey, GeocodingProperty>;
 	overrideExistingProperties: boolean;
+	searchPropertyOrder: string[];
 	mapLinkProvider: MapLinkProvider;
 	apiProvider: GeocodingProvider;
 	apiKey: string;

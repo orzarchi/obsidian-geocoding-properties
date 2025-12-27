@@ -4,11 +4,13 @@ Insert address / location data from geocoding APIs as Obsidian properties.
 
 ## Usage
 
-The plugin operates on the active note. It queries the configured geocoding API using one of the following search terms, in order of priority:
+The plugin operates on the active note. It queries the configured geocoding API using the search property order defined in the plugin settings. By default, the search term is resolved using the following priority list:
 
 -   The current note's `address` property, if set
 -   The current note's `title` property, if set
 -   The current note's name
+
+You can override this order in the settings if you prefer a different set of properties.
 
 The plugin provides two commands:
 
@@ -31,6 +33,10 @@ Each property can be enabled or disabled, and you can also specify a custom key 
 -   `map_view_link`: A link in in an [obsidian-map-view](https://github.com/esm7/obsidian-map-view)-compatible `[](geo:lat,lng)` format
 
 ### Property settings
+
+#### Search property order
+
+Controls which properties should be checked (and in what order) when building the geocoding search term. Provide a comma-separated list of property names; include `name` anywhere in the list to fall back to the note's filename.
 
 #### Override existing properties
 
