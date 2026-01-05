@@ -1,7 +1,8 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import GeocodingPlugin from "./main";
-import { defaultSettings, propertyDescriptions } from "./settings";
+import { propertyDescriptions } from "./settings";
 import { GeocodingPropertyDescription, GeocodingPropertyKey } from "./types";
+import SearchPropertySetting from "./search-property-setting";
 
 export class GeocodingPluginSettingTab extends PluginSettingTab {
 	plugin: GeocodingPlugin;
@@ -15,7 +16,7 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		new Setting(containerEl).setName('Properties').setHeading();
+		new Setting(containerEl).setName("Properties").setHeading();
 		for (const [key, description] of Object.entries(
 			propertyDescriptions
 		) as [GeocodingPropertyKey, GeocodingPropertyDescription][]) {
@@ -45,32 +46,30 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 				);
 		}
 
-		new Setting(containerEl).setName('Behavior').setHeading();
+		new Setting(containerEl).setName("Behavior").setHeading();
 		new Setting(containerEl)
 			.setName("Search property order")
 			.setDesc(
-				"Comma-separated list of properties to use when querying the geocoding API. Use \"name\" to fall back to the note name."
+				'Properties to use when querying the geocoding API. Use "name" to fall back to the note name.'
 			)
-			.addText((text) =>
-				text
-					.setPlaceholder(
-						defaultSettings.searchPropertyOrder.join(",")
-					)
-					.setValue(
-						this.plugin.settings.searchPropertyOrder.join(",")
-					)
-					.onChange(async (value) => {
-						const nextOrder = value
-							.split(",")
-							.map((item) => item.trim())
-							.filter(Boolean);
-						this.plugin.settings.searchPropertyOrder =
-							nextOrder.length
-								? nextOrder
-								: [...defaultSettings.searchPropertyOrder];
-						await this.plugin.saveSettings();
-					})
-			);
+			.setHeading();
+		this.plugin.settings.searchPropertyOrder.forEach(
+			(property, index) =>
+				new SearchPropertySetting(
+					this.plugin,
+					this,
+					containerEl,
+					property,
+					index
+				)
+		);
+		new Setting(containerEl).addExtraButton((cb) =>
+			cb.setIcon("circle-plus").onClick(async () => {
+				this.plugin.settings.searchPropertyOrder.push("");
+				await this.plugin.saveSettings();
+				this.display();
+			})
+		);
 		new Setting(containerEl)
 			.setName("Override existing properties")
 			.setDesc(
@@ -107,7 +106,7 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 					})
 			);
 
-		new Setting(containerEl).setName('API').setHeading();
+		new Setting(containerEl).setName("API").setHeading();
 		new Setting(containerEl)
 			.setName("API provider")
 			.addDropdown((dropdown) =>

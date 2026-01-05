@@ -1,0 +1,16 @@
+.geocoding-search-property-input {
+	width: 100%;
+}
+
+.geocoding-search-property-move-button.is-disabled {
+	pointer-events: none;
+	opacity: 0.2;
+}
+
+.geocoding-search-property-delete-button {
+	color: var(--color-red);
+}
+
+.geocoding-search-property-info-el {
+	display: none;
+}
