@@ -176,7 +176,13 @@ export default class GeocodingPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = merge(defaultSettings, (await this.loadData()) || {});
+		this.settings = merge(defaultSettings, (await this.loadData()) || {}, {
+			// Replace arrays instead of concatenating them,
+			// but fall back to defaults if user array is empty
+			arrayMerge: (destinationArray, sourceArray) => {
+				return sourceArray.length > 0 ? sourceArray : destinationArray;
+			},
+		});
 	}
 
 	async saveSettings() {
