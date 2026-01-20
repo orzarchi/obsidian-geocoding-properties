@@ -18,7 +18,7 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl).setName("Properties").setHeading();
 		for (const [key, description] of Object.entries(
-			propertyDescriptions
+			propertyDescriptions,
 		) as [GeocodingPropertyKey, GeocodingPropertyDescription][]) {
 			const property = this.plugin.settings.properties[key];
 			new Setting(containerEl)
@@ -34,7 +34,7 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 							}
 							property.frontmatterKey = value;
 							await this.plugin.saveSettings();
-						})
+						}),
 				)
 				.addToggle((toggle) =>
 					toggle
@@ -42,38 +42,15 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 						.onChange(async (value) => {
 							property.enabled = value;
 							await this.plugin.saveSettings();
-						})
+						}),
 				);
 		}
 
 		new Setting(containerEl).setName("Behavior").setHeading();
 		new Setting(containerEl)
-			.setName("Search property order")
-			.setDesc(
-				'Properties to use when querying the geocoding API. Use "name" to fall back to the note name.'
-			)
-			.setHeading();
-		this.plugin.settings.searchPropertyOrder.forEach(
-			(property, index) =>
-				new SearchPropertySetting(
-					this.plugin,
-					this,
-					containerEl,
-					property,
-					index
-				)
-		);
-		new Setting(containerEl).addExtraButton((cb) =>
-			cb.setIcon("circle-plus").onClick(async () => {
-				this.plugin.settings.searchPropertyOrder.push("");
-				await this.plugin.saveSettings();
-				this.display();
-			})
-		);
-		new Setting(containerEl)
 			.setName("Override existing properties")
 			.setDesc(
-				"Whether to override existing properties with the same name"
+				"Whether to override existing properties with the same name",
 			)
 			.addToggle((toggle) =>
 				toggle
@@ -81,7 +58,7 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 					.onChange(async (value) => {
 						this.plugin.settings.overrideExistingProperties = value;
 						await this.plugin.saveSettings();
-					})
+					}),
 			);
 		new Setting(containerEl)
 			.setName("Map link provider")
@@ -103,8 +80,46 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 								break;
 						}
 						await this.plugin.saveSettings();
-					})
+					}),
 			);
+		new Setting(containerEl)
+			.setName("Search property order")
+			.setDesc(
+				'Properties to use when querying the geocoding API. Use "name" to fall back to the note name.',
+			)
+			.setHeading();
+		this.plugin.settings.searchPropertyOrder.forEach(
+			(property, index) =>
+				new SearchPropertySetting(
+					this.plugin,
+					this,
+					containerEl,
+					property,
+					index,
+				),
+		);
+		let newSearchProperty = "";
+		const newSearchInput = new Setting(containerEl)
+			.addText((cb) => {
+				cb.onChange((value) => (newSearchProperty = value));
+				cb.inputEl.classList.add(
+					"geocoding-search-property-new-property-input",
+				);
+			})
+			.addExtraButton((cb) =>
+				cb.setIcon("circle-plus").onClick(async () => {
+					if (!newSearchProperty) return;
+
+					this.plugin.settings.searchPropertyOrder.push(
+						newSearchProperty,
+					);
+					await this.plugin.saveSettings();
+					this.display();
+				}),
+			);
+		newSearchInput.infoEl.classList.add(
+			"geocoding-search-property-info-el",
+		);
 
 		new Setting(containerEl).setName("API").setHeading();
 		new Setting(containerEl)
@@ -124,12 +139,12 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 								break;
 						}
 						await this.plugin.saveSettings();
-					})
+					}),
 			);
 		new Setting(containerEl)
 			.setName("API key")
 			.setDisabled(
-				this.plugin.settings.apiProvider !== "google-geocoding"
+				this.plugin.settings.apiProvider !== "google-geocoding",
 			)
 			.addText((text) =>
 				text
@@ -137,7 +152,7 @@ export class GeocodingPluginSettingTab extends PluginSettingTab {
 					.onChange(async (value) => {
 						this.plugin.settings.apiKey = value;
 						await this.plugin.saveSettings();
-					})
+					}),
 			);
 	}
 }
