@@ -15,7 +15,7 @@ export class GeocodingResultsModal extends SuggestModal<GeocodingResult> {
 
 	getSuggestions(query: string) {
 		return this.results.filter((result) =>
-			result.address.toLowerCase().includes(query.toLowerCase())
+			result.address.toLowerCase().includes(query.toLowerCase()),
 		);
 	}
 
@@ -25,7 +25,7 @@ export class GeocodingResultsModal extends SuggestModal<GeocodingResult> {
 
 	renderSuggestion(
 		{ address, lat, lng, info }: GeocodingResult,
-		el: HTMLElement
+		el: HTMLElement,
 	) {
 		el.createEl("div", {
 			text: `${address} (${lat}, ${lng})`,

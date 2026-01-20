@@ -16,7 +16,7 @@ export default class SearchPropertySetting extends Setting {
 		settingTab: GeocodingPluginSettingTab,
 		containerEl: HTMLElement,
 		value: string,
-		index: number
+		index: number,
 	) {
 		super(containerEl);
 		this.addText((cb) =>
@@ -27,7 +27,7 @@ export default class SearchPropertySetting extends Setting {
 					plugin.settings.searchPropertyOrder[index] = newValue;
 					await plugin.saveSettings();
 				})
-				.inputEl.addClass(CLASS_NAMES.propertyInput)
+				.inputEl.addClass(CLASS_NAMES.propertyInput),
 		)
 			.addExtraButton((cb) =>
 				cb
@@ -36,28 +36,29 @@ export default class SearchPropertySetting extends Setting {
 					.onClick(async () => {
 						moveElementUp(
 							plugin.settings.searchPropertyOrder,
-							index
+							index,
 						);
 						await plugin.saveSettings();
 						settingTab.display();
 					})
-					.extraSettingsEl.addClass(CLASS_NAMES.propertyMoveButton)
+					.extraSettingsEl.addClass(CLASS_NAMES.propertyMoveButton),
 			)
 			.addExtraButton((cb) =>
 				cb
 					.setIcon("move-down")
 					.setDisabled(
-						index === plugin.settings.searchPropertyOrder.length - 1
+						index ===
+							plugin.settings.searchPropertyOrder.length - 1,
 					)
 					.onClick(async () => {
 						moveElementDown(
 							plugin.settings.searchPropertyOrder,
-							index
+							index,
 						);
 						await plugin.saveSettings();
 						settingTab.display();
 					})
-					.extraSettingsEl.addClass(CLASS_NAMES.propertyMoveButton)
+					.extraSettingsEl.addClass(CLASS_NAMES.propertyMoveButton),
 			)
 			.addExtraButton((cb) =>
 				cb
@@ -67,7 +68,7 @@ export default class SearchPropertySetting extends Setting {
 						await plugin.saveSettings();
 						settingTab.display();
 					})
-					.extraSettingsEl.addClass(CLASS_NAMES.propertyDeleteButton)
+					.extraSettingsEl.addClass(CLASS_NAMES.propertyDeleteButton),
 			);
 		this.infoEl.addClass(CLASS_NAMES.propertyInfoEl);
 		return this;

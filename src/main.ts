@@ -52,10 +52,9 @@ export default class GeocodingPlugin extends Plugin {
 	getSearchTerm(file: TFile) {
 		const metadataCache = this.app.metadataCache.getFileCache(file);
 		const frontmatter = metadataCache?.frontmatter;
-		const order =
-			this.settings.searchPropertyOrder?.length
-				? this.settings.searchPropertyOrder
-				: defaultSettings.searchPropertyOrder;
+		const order = this.settings.searchPropertyOrder?.length
+			? this.settings.searchPropertyOrder
+			: defaultSettings.searchPropertyOrder;
 		for (const rawKey of order) {
 			const key = rawKey?.trim();
 			if (!key) {
@@ -75,8 +74,8 @@ export default class GeocodingPlugin extends Plugin {
 				typeof value === "string"
 					? value
 					: Array.isArray(value)
-					? value.join(", ")
-					: String(value);
+						? value.join(", ")
+						: String(value);
 			if (stringValue.trim()) {
 				return stringValue;
 			}
@@ -93,16 +92,16 @@ export default class GeocodingPlugin extends Plugin {
 					results.push(
 						...(await fetchFreeGeocodingAPIResults(
 							searchTerm,
-							apiKey
-						))
+							apiKey,
+						)),
 					);
 					break;
 				case "google-geocoding":
 					results.push(
 						...(await fetchGoogleGeocodingResults(
 							searchTerm,
-							apiKey
-						))
+							apiKey,
+						)),
 					);
 					break;
 				default:
@@ -129,7 +128,7 @@ export default class GeocodingPlugin extends Plugin {
 		this.app.fileManager.processFrontMatter(currentFile, (frontmatter) => {
 			for (const [key, property] of Object.entries(properties) as [
 				GeocodingPropertyKey,
-				GeocodingProperty
+				GeocodingProperty,
 			][]) {
 				const shouldInsert =
 					property.enabled &&
@@ -162,9 +161,8 @@ export default class GeocodingPlugin extends Plugin {
 						}
 						break;
 					case "map_view_link": {
-						frontmatter[
-							property.frontmatterKey
-						] = `[](geo:${result.lat},${result.lng})`;
+						frontmatter[property.frontmatterKey] =
+							`[](geo:${result.lat},${result.lng})`;
 						break;
 					}
 					default:

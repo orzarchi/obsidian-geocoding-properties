@@ -4,7 +4,7 @@ import { FreeGeocodingAPIResult, GeocodingResult } from "../types";
 // https://geocode.maps.co
 export const fetchFreeGeocodingAPIResults = async (
 	searchTerm: string,
-	apiKey: string
+	apiKey: string,
 ): Promise<GeocodingResult[]> => {
 	const params = new URLSearchParams({
 		q: searchTerm,
@@ -25,7 +25,7 @@ export const fetchFreeGeocodingAPIResults = async (
 		case 503:
 			if (retryAfter) {
 				throw new Error(
-					`Too many requests. Please try again in ${retryAfter} seconds.`
+					`Too many requests. Please try again in ${retryAfter} seconds.`,
 				);
 			}
 			throw new Error("Too many requests. Please try again later.");

@@ -22,7 +22,9 @@ export class GeocodingSearchModal extends Modal {
 		const { contentEl } = this;
 		this.titleEl.setText("Confirm search term");
 
-		const inputContainer = contentEl.createEl("div", { cls: "geocoding-search-container" });
+		const inputContainer = contentEl.createEl("div", {
+			cls: "geocoding-search-container",
+		});
 
 		new Setting(inputContainer).setName("Name").addText((text) => {
 			const component = text
@@ -34,9 +36,14 @@ export class GeocodingSearchModal extends Modal {
 			component.inputEl.style.width = "100%";
 		});
 
-		const buttonContainer = contentEl.createEl("div", { cls: "modal-button-container" });
+		const buttonContainer = contentEl.createEl("div", {
+			cls: "modal-button-container",
+		});
 
-		const submitButton = buttonContainer.createEl("button", { text: "Submit", cls: "mod-cta" });
+		const submitButton = buttonContainer.createEl("button", {
+			text: "Submit",
+			cls: "mod-cta",
+		});
 		submitButton.addEventListener("click", async () => {
 			await this.onSubmit();
 		});

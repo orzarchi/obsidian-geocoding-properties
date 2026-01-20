@@ -14,3 +14,7 @@
 .geocoding-search-property-info-el {
 	display: none;
 }
+
+.geocoding-search-property-new-property-input {
+	flex: 1;
+}

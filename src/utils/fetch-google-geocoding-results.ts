@@ -4,7 +4,7 @@ import { GeocodingResult, GoogleGeocodingAPIResponse } from "../types";
 // https://developers.google.com/maps/documentation/geocoding/overview
 export const fetchGoogleGeocodingResults = async (
 	searchTerm: string,
-	apiKey: string
+	apiKey: string,
 ): Promise<GeocodingResult[]> => {
 	const params = new URLSearchParams({
 		address: searchTerm,
